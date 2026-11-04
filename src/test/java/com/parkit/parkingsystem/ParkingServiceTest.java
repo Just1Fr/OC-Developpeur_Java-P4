@@ -57,6 +57,9 @@ public class ParkingServiceTest {
             lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
             // Return mocked parkingSpot id
             lenient().when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(parkingSpot.getId());
+            // Successfully update database
+            lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
+            lenient().when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
         } catch (Exception e) {
             logger.error("Failed to set up test mock objects", e);
             throw new RuntimeException("Failed to set up test mock objects");
@@ -65,7 +68,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicle() {
-        // Successfully update ticket
+        // Successfully update ticket in database
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
         parkingService.processExitingVehicle();
@@ -78,7 +81,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleUnableUpdate() {
-        // Fail to update ticket
+        // Fail to update ticket in database
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
         parkingService.processExitingVehicle();
@@ -96,6 +99,32 @@ public class ParkingServiceTest {
         verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
         verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+        verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
+    }
+
+    @Test
+    public void processIncomingVehicleUnableUpdateParking() {
+        // Fail to update parking spot in database
+        lenient().when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(false);
+
+        parkingService.processIncomingVehicle();
+
+        verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
+        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+        verify(ticketDAO, never()).saveTicket(any(Ticket.class));
+    }
+
+    @Test
+    public void processIncomingVehicleUnableSaveTicket() {
+        // Fail to save ticket in database
+        lenient().when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(false);
+
+        parkingService.processIncomingVehicle();
+
+        verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
+        verify(parkingSpotDAO, times(2)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
     }
 
