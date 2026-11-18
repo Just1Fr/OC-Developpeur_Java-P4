@@ -49,17 +49,16 @@ public class ParkingService {
                 if (parkingSpotDAO.updateParking(parkingSpot)) {
                     Date inTime = new Date();
                     Ticket ticket = new Ticket();
-                    // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                    // ticket.setId(ticketID);
+                    // ID (auto-generated), PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME
                     ticket.setParkingSpot(parkingSpot);
                     ticket.setVehicleRegNumber(vehicleRegNumber);
                     ticket.setPrice(0);
                     ticket.setInTime(inTime);
                     ticket.setOutTime(null);
                     if (ticketDAO.saveTicket(ticket)) {
-                        System.out.println("Generated Ticket and saved in DB");
-                        System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
-                        System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+                        System.out.println("Successfully generated and saved a ticket.");
+                        System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
+                        System.out.println("Recorded in-time for vehicle number " + vehicleRegNumber + ": " + inTime);
                     } else {
                         System.out.println("Error: Unable to save ticket information.");
                         // Set available back to true if saveTicket() fails
@@ -78,7 +77,7 @@ public class ParkingService {
     }
 
     private String getVehicleRegNumber() {
-        System.out.println("Please type the vehicle registration number and press enter key");
+        System.out.println("Please type the vehicle registration number and press enter key: ");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
@@ -91,7 +90,7 @@ public class ParkingService {
             if (parkingNumber > 0) {
                 parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
             } else {
-                throw new Exception("Error fetching parking number from DB. Parking slots might be full");
+                throw new Exception("Error fetching parking number from DB. Parking slots might be full.");
             }
         } catch (IllegalArgumentException ie) {
             logger.error("Error parsing user input for type of vehicle", ie);
@@ -102,9 +101,9 @@ public class ParkingService {
     }
 
     private ParkingType getVehicleType() {
-        System.out.println("Please select vehicle type from menu");
-        System.out.println("1 CAR");
-        System.out.println("2 BIKE");
+        System.out.println("Please select vehicle type from menu:");
+        System.out.println("1.CAR");
+        System.out.println("2.BIKE");
         int input = inputReaderUtil.readSelection();
         switch (input) {
             case 1: {
@@ -115,7 +114,7 @@ public class ParkingService {
             }
             default: {
                 System.out.println("Incorrect input provided");
-                throw new IllegalArgumentException("Entered input is invalid");
+                throw new IllegalArgumentException("Incorrect vehicle type inputted");
             }
         }
     }
@@ -135,8 +134,8 @@ public class ParkingService {
                     // Set available back to false if updateParking() fails, to reflect database state
                     parkingSpot.setAvailable(false);
                 }
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+                System.out.println("Please pay the parking fare: " + ticket.getPrice());
+                System.out.println("Recorded out-time for vehicle number " + ticket.getVehicleRegNumber() + ": " + outTime);
             } else {
                 System.out.println("Error: Unable to update ticket information.");
             }
