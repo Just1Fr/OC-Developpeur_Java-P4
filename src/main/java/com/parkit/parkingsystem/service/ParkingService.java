@@ -27,6 +27,10 @@ public class ParkingService {
         this.ticketDAO = ticketDAO;
     }
 
+    public int getRegularClientThreshold() {
+        return REGULAR_CLIENT_THRESHOLD;
+    }
+
     private boolean isRegularClient(TicketDAO ticketDAO, String vehicleRegNumber) {
         return ticketDAO.getNbTicket(vehicleRegNumber) >= REGULAR_CLIENT_THRESHOLD;
     }
