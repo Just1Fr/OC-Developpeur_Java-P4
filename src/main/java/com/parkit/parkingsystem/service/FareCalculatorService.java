@@ -18,25 +18,25 @@ public class FareCalculatorService {
 
         long inHour = ticket.getInTime().getTime();
         long outHour = ticket.getOutTime().getTime();
-        double duration = (double) (outHour - inHour) / 3600000;
+        double duration = (double) (outHour - inHour) / 3600000; // duration in hours
 
-        if (duration < 0.5) {
-            ticket.setPrice(0);
-        } else {
+        double price = 0;
+        if (duration >= 0.5) {
+            double fare;
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    double fare = hasDiscount ? Fare.CAR_RATE_PER_HOUR * DISCOUNT : Fare.CAR_RATE_PER_HOUR;
-                    ticket.setPrice(duration * fare);
+                    fare = Fare.CAR_RATE_PER_HOUR;
                     break;
                 }
                 case BIKE: {
-                    double fare = hasDiscount ? Fare.BIKE_RATE_PER_HOUR * DISCOUNT : Fare.BIKE_RATE_PER_HOUR;
-                    ticket.setPrice(duration * fare);
+                    fare = Fare.BIKE_RATE_PER_HOUR;
                     break;
                 }
                 default:
                     throw new IllegalArgumentException("Unknown Parking Type");
             }
+            price = hasDiscount ? duration * fare * DISCOUNT : duration * fare;
         }
+        ticket.setPrice(price);
     }
 }
