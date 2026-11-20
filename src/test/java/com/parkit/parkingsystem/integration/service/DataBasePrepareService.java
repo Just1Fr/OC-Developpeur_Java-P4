@@ -13,10 +13,10 @@ public class DataBasePrepareService {
         try {
             connection = dataBaseTestConfig.getConnection();
 
-            //set parking entries to available
+            // set parking entries to available
             connection.prepareStatement("update parking set available = true").execute();
 
-            //clear ticket entries;
+            // clear ticket entries;
             connection.prepareStatement("truncate table ticket").execute();
 
         } catch (Exception e) {
