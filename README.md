@@ -39,8 +39,10 @@ Finally, you will be ready to import the code into an IDE of your choice and run
 
 ### Testing
 
-The app has unit tests and integration tests written. The tests need to be triggered from maven-surefire plugin while we try to generate the final executable jar file.
+The app has unit tests and integration tests written.
 
-To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
+1. To run the tests from maven and generate a JaCoCo report ([/target/site/jacoco/index.html](/target/site/jacoco/index.html) by default), run  
+`mvn verify`
 
-`mvn test`
+2. To generate a surefire report ([/target/reports/surefire.html](/target/reports/surefire.html) by default), run  
+`mvn surefire-report:report-only`
