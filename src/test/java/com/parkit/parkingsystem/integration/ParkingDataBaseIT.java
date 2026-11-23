@@ -108,7 +108,7 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExitRecurringUser() {
-        // Add enough tickets to become a regular client (including 1 from previous test)
+        // Add enough tickets to become a regular client
         for (int i = 0; i < parkingService.getRegularClientThreshold() - 1; i++) {
             testParkingACar();
             testParkingLotExit();
