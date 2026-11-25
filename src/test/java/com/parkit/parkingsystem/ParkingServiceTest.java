@@ -93,6 +93,19 @@ public class ParkingServiceTest {
     }
 
     @Test
+    public void processExitingVehicleWrongRegNumber() {
+        // Unknown registration number entered by user
+        when(ticketDAO.getTicket(any(String.class))).thenReturn(null);
+
+        parkingService.processExitingVehicle();
+
+        verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+        verify(ticketDAO, times(1)).getTicket(ticket.getVehicleRegNumber());
+        verify(ticketDAO, never()).updateTicket(any(Ticket.class));
+        verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class));
+    }
+
+    @Test
     public void processIncomingVehicle() {
         parkingService.processIncomingVehicle();
 
