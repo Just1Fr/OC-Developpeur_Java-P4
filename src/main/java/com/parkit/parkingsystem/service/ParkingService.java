@@ -77,7 +77,7 @@ public class ParkingService {
     }
 
     private String getVehicleRegNumber() {
-        System.out.println("Please type the vehicle registration number and press enter key: ");
+        System.out.println("\nPlease type the vehicle registration number and press enter key: ");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
@@ -101,7 +101,7 @@ public class ParkingService {
     }
 
     private ParkingType getVehicleType() {
-        System.out.println("Please select vehicle type from menu:");
+        System.out.println("\nPlease select vehicle type from menu:");
         System.out.println("1.CAR");
         System.out.println("2.BIKE");
         int input = inputReaderUtil.readSelection();

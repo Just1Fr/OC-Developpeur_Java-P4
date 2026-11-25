@@ -44,7 +44,7 @@ public class InteractiveShell {
     }
 
     private static void loadMenu() {
-        System.out.println("Please select an option. Simply enter the number to choose an action");
+        System.out.println("\nPlease select an option. Simply enter the number to choose an action");
         System.out.println("1 New Vehicle Entering - Allocate Parking Space");
         System.out.println("2 Vehicle Exiting - Generate Ticket Price");
         System.out.println("3 Shutdown System");
